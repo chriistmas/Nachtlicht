@@ -25,9 +25,9 @@ A versatile ESP32-based car project that can be controlled over both **Bluetooth
 ## 🔗 Board Manager Setup
 
 For both Bluetooth and WiFi, add the following URLs to **Preferences > Additional Boards Manager URLs**:
-1. [](http://arduino.esp8266.com/stable/package_esp8266com_index.json)
-2. [](https://dl.espressif.com/dl/package_esp32_index.json)
-3. [](https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json)
+1. [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json)
+2. [https://dl.espressif.com/dl/package_esp32_index.json](https://dl.espressif.com/dl/package_esp32_index.json)
+3. [https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json](https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json)
 
 
 
