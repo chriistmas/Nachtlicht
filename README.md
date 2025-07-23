@@ -56,26 +56,26 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 ---
 
 ## 📂 Project Structure
-.
-```├── Controller App.zip```
-```├── ESP32-Bluetooth-1```
-│   └── ESP32-Bluetooth-1.ino
-├── ESP32-WIFI-2
-│   └── ESP32-WIFI-2.ino
-├── README.md
-├── requirements
-│   ├── 4.2v_3200mah_Litio_BOSSNEY.png
-│   ├── diagram.png
-│   ├── esp32-devkitc-v4-esp32-wifi-micro-usb.jpg
-│   ├── esp32s_38p_v4_goouuExpansionBoard.png
-│   ├── L298N_motorDriverModule.jpg
-│   ├── lib1.png
-│   ├── lib2.png
-│   └── Motor_eléctrico_TT_de_CC_de_3V-6V.jpg
-├── testing_motor_wheels
-│   └── test1.ino
-└── testing_motor_wheels++
-    └── test2.ino
+.<br>
+├── Controller App.zip<br>
+├── ESP32-Bluetooth-1<br>
+│   └── ESP32-Bluetooth-1.ino<br>
+├── ESP32-WIFI-2<br>
+│   └── ESP32-WIFI-2.ino<br>
+├── README.md<br>
+├── requirements<br>
+│   ├── 4.2v_3200mah_Litio_BOSSNEY.png<br>
+│   ├── diagram.png<br>
+│   ├── esp32-devkitc-v4-esp32-wifi-micro-usb.jpg<br>
+│   ├── esp32s_38p_v4_goouuExpansionBoard.png<br>
+│   ├── L298N_motorDriverModule.jpg<br>
+│   ├── lib1.png<br>
+│   ├── lib2.png<br>
+│   └── Motor_eléctrico_TT_de_CC_de_3V-6V.jpg<br>
+├── testing_motor_wheels<br>
+│   └── test1.ino<br>
+└── testing_motor_wheels++<br>
+    └── test2.ino<br>
 
 ---
 
