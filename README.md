@@ -56,7 +56,7 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 ---
 
 ## 📂 Project Structure
-<details> <summary><strong>📁 Project Structure</strong></summary>
+<summary><strong>
 .
 ├── Controller App.zip
 ├── ESP32-Bluetooth-1
@@ -78,8 +78,7 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 └── testing_motor_wheels++
     └── test2.ino
 
-
-</details>
+</strong></summary>
 
 ---
 
