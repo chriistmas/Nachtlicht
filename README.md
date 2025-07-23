@@ -2,7 +2,7 @@
 
 A versatile ESP32-based car project that can be controlled over both **Bluetooth** and **WiFi**! Seamlessly switch between modes and enjoy flexible remote control capabilities.
 
-![Project Diagram](requirements/diagram.png)
+<img src="requirements/diagram.png" alt="Project Diagram" width="300"/>
 
 ---
 
