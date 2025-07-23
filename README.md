@@ -57,8 +57,8 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 
 ## 📂 Project Structure
 .
-├── Controller App.zip
-├── ESP32-Bluetooth-1
+```├── Controller App.zip```
+```├── ESP32-Bluetooth-1```
 │   └── ESP32-Bluetooth-1.ino
 ├── ESP32-WIFI-2
 │   └── ESP32-WIFI-2.ino
