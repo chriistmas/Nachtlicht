@@ -19,7 +19,10 @@ A versatile ESP32-based car project that can be controlled over both **Bluetooth
 
 - **Arduino IDE:** `arduino-ide_2.3.6_Linux_64bit.AppImage` (Linux)
 - **ESP32 Dev Board**
-
+- **esp32s 38p/v4/goouuu expansion board**
+- **L298N motor driver module**
+- **2 Motor eléctrico TT de CC de 3V-6V**
+- **Robot de Motor de engranaje de doble eje para coche inteligente**
 ---
 
 ## 🔗 Board Manager Setup
