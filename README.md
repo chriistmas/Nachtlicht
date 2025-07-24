@@ -1,4 +1,4 @@
-# Bluetooth and WiFi Car 2-in-1 🚗📶
+# Bluetooth and WiFi Car two in one 🚗📶
 
 A versatile ESP32-based car project that can be controlled over both **Bluetooth** and **WiFi**! Seamlessly switch between modes and enjoy flexible remote control capabilities.
 
