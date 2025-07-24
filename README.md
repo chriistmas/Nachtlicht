@@ -48,6 +48,8 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 - **Board Manager:** ESP32 by Espressif Systems (`2.0.11` for WiFi)
 - **Connection:**  
   `station (mobile/desktop browser)` ⟷ `Access Point (ESP32 car)`
+- **http://192.168.4.1/**
+  `Serial monitor` ⟷ `IP Address`
 
 ### Required Libraries
 
