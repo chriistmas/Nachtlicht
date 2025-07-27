@@ -12,6 +12,9 @@ A versatile ESP32-based car project that can be controlled over both **Bluetooth
 - Easy setup with Arduino IDE
 - Simple library and board manager integration
 - Mobile and desktop browser support for WiFi mode
+- **NEW**: Interactive map interface with real-time position tracking
+- **NEW**: Visual path history and navigation visualization
+- **NEW**: Live car direction and status indicators
 
 ---
 
@@ -50,6 +53,14 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
   `station (mobile/desktop browser)` ⟷ `Access Point (ESP32 car)`
 - **http://192.168.4.1/**<br>
   `Serial monitor` ⟷ `IP Address`
+
+### NEW: Map Interface Features
+- Real-time car position tracking on visual map
+- Path history visualization showing movement trail
+- Interactive controls: Clear Path, Reset Position, Toggle Grid
+- Live status indicators: Position coordinates, direction, speed, and movement status
+- Grid overlay for better spatial reference
+- Car orientation visualization with directional indicator
 
 ### Required Libraries
 
