@@ -79,7 +79,7 @@ This project is licensed under the MIT License.
 
 - **TEAM MEMBERS**
   - Fernando Enrique Llosa Manchego
-  - Ronald reynaldo Valdez Aguero
+  - Ronald Reynaldo Valdez Agüero ^^
   - Diego Josue Huaricallo Fano
 
 ---
