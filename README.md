@@ -61,7 +61,7 @@ For both Bluetooth and WiFi, add the following URLs to **Preferences > Additiona
 ---
 
 ## 📂 Arqui Project Explanation
-[![Watch the video](requirements/test.gif)](https://youtu.be/Tb0Tck9enj0)
+[![Watch the video](requirements/test.gif)](https://www.youtube.com/watch?v=RMkd3jz0x1o)
 
 ---
 
