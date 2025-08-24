@@ -75,20 +75,34 @@ const char* htmlHomePage PROGMEM = R"HTML(
       background-color: #fdfd96;
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      overflow: hidden;
+      padding: 10px;
+      overflow-x: auto;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
-    .layout {
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .controls-section {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      width: 90%;
-      max-width: 600px;
+      min-width: 400px;
       align-items: center;
+    }
+    .map-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
     .column {
       display: flex;
@@ -107,8 +121,8 @@ const char* htmlHomePage PROGMEM = R"HTML(
       gap: 20px;
     }
     .button {
-      width: 120px;
-      height: 120px;
+      width: 80px;
+      height: 80px;
       background-color: white;
       border-radius: 10px;
       box-shadow: 5px 5px #888888;
@@ -116,6 +130,8 @@ const char* htmlHomePage PROGMEM = R"HTML(
       justify-content: center;
       align-items: center;
       user-select: none;
+      font-size: 12px;
+      font-weight: bold;
     }
     .button:active {
       transform: translate(5px, 5px);
@@ -128,34 +144,108 @@ const char* htmlHomePage PROGMEM = R"HTML(
     .slider {
       width: 100%;
     }
+    #mapCanvas {
+      border: 2px solid #333;
+      background-color: #e8f5e8;
+      border-radius: 10px;
+    }
+    .map-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .map-button {
+      padding: 8px 16px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .map-button:hover {
+      background-color: #f0f0f0;
+    }
+    .status-info {
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 12px;
+      text-align: center;
+      max-width: 300px;
+    }
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .controls-section {
+        min-width: auto;
+        width: 100%;
+        max-width: 400px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Main layout with buttons and slider -->
-  <div class="layout">
-    <div class="column">
-      <div class="button" ontouchstart='send("MoveCar","1")' ontouchend='send("MoveCar","0")' onmousedown='send("MoveCar","1")' onmouseup='send("MoveCar","0")'>UP</div>
-      <div class="button" ontouchstart='send("MoveCar","2")' ontouchend='send("MoveCar","0")' onmousedown='send("MoveCar","2")' onmouseup='send("MoveCar","0")'>DOWN</div>
-    </div>
-    <div class="right-controls">
-      <div class="slider-container">
-        <label for="Speed">Speed:</label><br>
-        <input type="range" min="0" max="255" value="150" class="slider" id="Speed" oninput='send("Speed",value)'>
+  <div class="main-container">
+    <!-- Controls Section -->
+    <div class="controls-section">
+      <div class="column">
+        <div class="button" ontouchstart='sendMove("1")' ontouchend='sendMove("0")' onmousedown='sendMove("1")' onmouseup='sendMove("0")'>UP</div>
+        <div class="button" ontouchstart='sendMove("2")' ontouchend='sendMove("0")' onmousedown='sendMove("2")' onmouseup='sendMove("0")'>DOWN</div>
       </div>
-      <div class="row">
-        <div class="button" ontouchstart='send("MoveCar","3")' ontouchend='send("MoveCar","0")' onmousedown='send("MoveCar","3")' onmouseup='send("MoveCar","0")'>LEFT</div>
-        <div class="button" ontouchstart='send("MoveCar","4")' ontouchend='send("MoveCar","0")' onmousedown='send("MoveCar","4")' onmouseup='send("MoveCar","0")'>RIGHT</div>
+      <div class="right-controls">
+        <div class="slider-container">
+          <label for="Speed">Speed:</label><br>
+          <input type="range" min="0" max="255" value="150" class="slider" id="Speed" oninput='updateSpeed(value)'>
+        </div>
+        <div class="row">
+          <div class="button" ontouchstart='sendMove("3")' ontouchend='sendMove("0")' onmousedown='sendMove("3")' onmouseup='sendMove("0")'>LEFT</div>
+          <div class="button" ontouchstart='sendMove("4")' ontouchend='sendMove("0")' onmousedown='sendMove("4")' onmouseup='sendMove("0")'>RIGHT</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Map Section -->
+    <div class="map-section">
+      <h3 style="margin: 0;">Car Navigation Map</h3>
+      <canvas id="mapCanvas" width="400" height="300"></canvas>
+      <div class="map-controls">
+        <button class="map-button" onclick="clearPath()">Clear Path</button>
+        <button class="map-button" onclick="resetPosition()">Reset Position</button>
+        <button class="map-button" onclick="toggleGrid()">Toggle Grid</button>
+      </div>
+      <div class="status-info">
+        <div>Position: <span id="position">X: 200, Y: 150</span></div>
+        <div>Direction: <span id="direction">North</span></div>
+        <div>Speed: <span id="currentSpeed">150</span></div>
+        <div>Status: <span id="status">Stopped</span></div>
       </div>
     </div>
   </div>
 
   <script>
     var socket;
+    var mapCanvas, ctx;
+    var carPosition = { x: 200, y: 150 }; // Center of canvas
+    var carDirection = 0; // 0=North, 90=East, 180=South, 270=West
+    var pathHistory = [];
+    var currentSpeed = 150;
+    var isMoving = false;
+    var showGrid = true;
+    var movementInterval;
+    
+    // Direction mappings
+    const directions = ['North', 'East', 'South', 'West'];
+    
     // Establish WebSocket connection
     function connect() {
       socket = new WebSocket("ws://" + location.host + "/CarInput");
       socket.onopen = () => {
         send("Speed", document.getElementById("Speed").value); // Set initial speed
+        updateDisplay();
       };
       socket.onclose = () => setTimeout(connect, 2000); // Reconnect if disconnected
     }
@@ -166,8 +256,201 @@ const char* htmlHomePage PROGMEM = R"HTML(
         socket.send(key + "," + value);
       }
     }
-
-    window.onload = connect; // Connect on page load
+    
+    // Enhanced movement function with map integration
+    function sendMove(direction) {
+      send("MoveCar", direction);
+      
+      if (direction === "0") {
+        // Stop movement
+        isMoving = false;
+        if (movementInterval) {
+          clearInterval(movementInterval);
+          movementInterval = null;
+        }
+        updateStatus("Stopped");
+      } else {
+        // Start movement
+        isMoving = true;
+        updateCarDirection(direction);
+        updateStatus("Moving " + directions[Math.floor(carDirection / 90)]);
+        
+        // Start movement simulation on map
+        if (movementInterval) clearInterval(movementInterval);
+        movementInterval = setInterval(() => {
+          if (isMoving) {
+            simulateMovement(direction);
+          }
+        }, 100); // Update position every 100ms
+      }
+    }
+    
+    function updateCarDirection(direction) {
+      switch(direction) {
+        case "1": carDirection = 0; break;   // UP = North
+        case "2": carDirection = 180; break; // DOWN = South  
+        case "3": carDirection = 270; break; // LEFT = West
+        case "4": carDirection = 90; break;  // RIGHT = East
+      }
+    }
+    
+    function simulateMovement(direction) {
+      const speed = currentSpeed / 255; // Normalize speed
+      const moveDistance = speed * 2; // Scale movement
+      
+      // Add current position to path history
+      pathHistory.push({ x: carPosition.x, y: carPosition.y });
+      if (pathHistory.length > 500) { // Limit path history
+        pathHistory.shift();
+      }
+      
+      // Calculate new position based on direction
+      switch(direction) {
+        case "1": // UP
+          carPosition.y = Math.max(20, carPosition.y - moveDistance);
+          break;
+        case "2": // DOWN
+          carPosition.y = Math.min(280, carPosition.y + moveDistance);
+          break;
+        case "3": // LEFT
+          carPosition.x = Math.max(20, carPosition.x - moveDistance);
+          break;
+        case "4": // RIGHT
+          carPosition.x = Math.min(380, carPosition.x + moveDistance);
+          break;
+      }
+      
+      drawMap();
+      updateDisplay();
+    }
+    
+    function initMap() {
+      mapCanvas = document.getElementById('mapCanvas');
+      ctx = mapCanvas.getContext('2d');
+      drawMap();
+    }
+    
+    function drawMap() {
+      // Clear canvas
+      ctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+      
+      // Draw grid if enabled
+      if (showGrid) {
+        drawGrid();
+      }
+      
+      // Draw path history
+      drawPath();
+      
+      // Draw car
+      drawCar();
+    }
+    
+    function drawGrid() {
+      ctx.strokeStyle = '#ccc';
+      ctx.lineWidth = 1;
+      
+      // Vertical lines
+      for (let x = 0; x <= mapCanvas.width; x += 20) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, mapCanvas.height);
+        ctx.stroke();
+      }
+      
+      // Horizontal lines
+      for (let y = 0; y <= mapCanvas.height; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(mapCanvas.width, y);
+        ctx.stroke();
+      }
+    }
+    
+    function drawPath() {
+      if (pathHistory.length < 2) return;
+      
+      ctx.strokeStyle = '#ff6b6b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      
+      ctx.moveTo(pathHistory[0].x, pathHistory[0].y);
+      for (let i = 1; i < pathHistory.length; i++) {
+        ctx.lineTo(pathHistory[i].x, pathHistory[i].y);
+      }
+      ctx.stroke();
+    }
+    
+    function drawCar() {
+      ctx.save();
+      ctx.translate(carPosition.x, carPosition.y);
+      ctx.rotate(carDirection * Math.PI / 180);
+      
+      // Car body
+      ctx.fillStyle = '#4CAF50';
+      ctx.fillRect(-8, -12, 16, 24);
+      
+      // Car direction indicator (front)
+      ctx.fillStyle = '#2196F3';
+      ctx.fillRect(-6, -12, 12, 6);
+      
+      // Car outline
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-8, -12, 16, 24);
+      
+      ctx.restore();
+      
+      // Position marker
+      ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+      ctx.beginPath();
+      ctx.arc(carPosition.x, carPosition.y, 15, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    function updateDisplay() {
+      document.getElementById('position').textContent = 
+        `X: ${Math.round(carPosition.x)}, Y: ${Math.round(carPosition.y)}`;
+      document.getElementById('direction').textContent = 
+        directions[Math.floor(carDirection / 90)];
+      document.getElementById('currentSpeed').textContent = currentSpeed;
+    }
+    
+    function updateStatus(status) {
+      document.getElementById('status').textContent = status;
+    }
+    
+    function clearPath() {
+      pathHistory = [];
+      drawMap();
+    }
+    
+    function resetPosition() {
+      carPosition = { x: 200, y: 150 };
+      carDirection = 0;
+      pathHistory = [];
+      drawMap();
+      updateDisplay();
+    }
+    
+    function toggleGrid() {
+      showGrid = !showGrid;
+      drawMap();
+    }
+    
+    // Update speed tracking
+    function updateSpeed(value) {
+      currentSpeed = parseInt(value);
+      send("Speed", value);
+      updateDisplay();
+    }
+    
+    // Initialize everything on page load
+    window.onload = function() {
+      connect();
+      initMap();
+      updateDisplay();
+    };
   </script>
 </body>
 </html>
